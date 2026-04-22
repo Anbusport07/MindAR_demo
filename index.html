@@ -4,36 +4,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MindAR Web AR App</title>
     
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
     
     <a-scene 
-      mindar-image="imageTargetSrc: ../mind_files/fighterjet.mind;" 
+      mindar-image="imageTargetSrc: /MindAR_demo/mind_files/fighterjet.mind;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false">
       
       <a-assets>
-        <img id="card" src="../Targets/fighterjet.jpeg" crossorigin="anonymous" />
-        <a-asset-item id="fighterjet" src="../3dmodels/fighterjet.gltf"></a-asset-item>
+        <img id="card" src="/MindAR_demo/Targets/fighterjet.jpeg" crossorigin="anonymous" />
+        <a-asset-item id="fighterjet" src="/MindAR_demo/3dmodels/fighterjet.gltf"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        
         <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-        
         <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.005 0.005 0.005" src="#fighterjet" 
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
-        
       </a-entity>
+      
     </a-scene>
   </body>
 </html>
