@@ -6,21 +6,6 @@
     
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
-    <script>
-      AFRAME.registerComponent('hotspot-click', {
-        init: function () {
-          const detailPanel = document.querySelector('#detail-panel');
-          
-          this.el.addEventListener('click', () => {
-            // Check if the panel is currently visible
-            const isVisible = detailPanel.getAttribute('visible');
-            // Toggle the visibility
-            detailPanel.setAttribute('visible', !isVisible);
-          });
-        }
-      });
-    </script>
   </head>
   <body>
     
@@ -28,15 +13,12 @@
       mindar-image="imageTargetSrc: /MindAR_demo/mind_files/fighterjet.mind; filterMinCF: 0.0001; filterBeta: 0.001;" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
-      device-orientation-permission-ui="enabled: false"
-      cursor="rayOrigin: mouse;"
-      raycaster="objects: .clickable">
+      device-orientation-permission-ui="enabled: false">
       
       <a-assets>
         <img id="card" src="/MindAR_demo/Targets/fighterjet.jpeg" crossorigin="anonymous" />
         <a-asset-item id="fighterjet" src="/MindAR_demo/3dmodels/fighter_jet.glb"></a-asset-item>
-        
-        </a-assets>
+      </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
@@ -51,26 +33,7 @@
           src="#fighterjet" 
           animation="property: position; to: 0 0.1 0.5; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
-
-        <a-circle 
-          class="clickable" 
-          position="0.4 0.2 0.6" 
-          radius="0.05" 
-          color="#FF0000" 
-          hotspot-click>
-        </a-circle>
-
-        <a-entity id="detail-panel" position="0.4 0.45 0.6" visible="false">
-          <a-plane width="0.6" height="0.2" color="#000000" opacity="0.8" position="0 0 0"></a-plane>
-          <a-text 
-            value="Cockpit Canopy\nAdvanced HUD inside." 
-            align="center" 
-            color="#FFFFFF" 
-            width="1.5" 
-            position="0 0 0.01">
-          </a-text>
-        </a-entity>
-
+        
       </a-entity>
       
     </a-scene>
