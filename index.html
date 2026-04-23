@@ -8,21 +8,20 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <script>
-      // 1. Hotspot Toggle Component (Updated for Mobile Touch)
+      // 1. Hotspot Toggle Component (Bulletproof logic)
       AFRAME.registerComponent('hotspot-click', {
         init: function () {
           const detailPanel = document.querySelector('#detail-panel');
           
-          const toggleVisibility = (evt) => {
-            // Prevent default behavior to stop double-firing if both click and touch register
-            evt.preventDefault(); 
+          this.el.addEventListener('click', () => {
+            // Check visibility and explicitly set true/false
             const isVisible = detailPanel.getAttribute('visible');
-            detailPanel.setAttribute('visible', !isVisible);
-          };
-
-          // Listen for both computer mouse clicks AND mobile screen touches
-          this.el.addEventListener('click', toggleVisibility);
-          this.el.addEventListener('touchstart', toggleVisibility);
+            if (isVisible) {
+              detailPanel.setAttribute('visible', false);
+            } else {
+              detailPanel.setAttribute('visible', true);
+            }
+          });
         }
       });
 
@@ -33,47 +32,34 @@
           this.isDragging = false;
           this.previousPositionX = 0;
           
-          // Bind 'this' so we can access variables inside the event listeners
           this.onDragStart = this.onDragStart.bind(this);
           this.onDragMove = this.onDragMove.bind(this);
           this.onDragEnd = this.onDragEnd.bind(this);
 
-          // We listen to the whole scene so you can swipe anywhere on the screen
           const sceneEl = document.querySelector('a-scene');
           
-          // Mouse events (for desktop testing)
           sceneEl.addEventListener('mousedown', this.onDragStart);
           sceneEl.addEventListener('mousemove', this.onDragMove);
           sceneEl.addEventListener('mouseup', this.onDragEnd);
           
-          // Touch events (for mobile)
           sceneEl.addEventListener('touchstart', this.onDragStart);
           sceneEl.addEventListener('touchmove', this.onDragMove);
           sceneEl.addEventListener('touchend', this.onDragEnd);
         },
         onDragStart: function (evt) {
           this.isDragging = true;
-          // Get starting X position of finger or mouse
           this.previousPositionX = evt.touches ? evt.touches[0].pageX : evt.clientX;
         },
         onDragMove: function (evt) {
           if (!this.isDragging) return;
           
-          // Get current X position
           const currentPositionX = evt.touches ? evt.touches[0].pageX : evt.clientX;
-          // Calculate how far the finger moved
           const deltaX = currentPositionX - this.previousPositionX;
           
-          // Get the model's current rotation
           const rotation = this.el.getAttribute('rotation');
-          
-          // Add the movement distance to the Y rotation axis
           rotation.y += deltaX * this.data.speed;
-          
-          // Apply the new rotation
           this.el.setAttribute('rotation', rotation);
           
-          // Update the previous position for the next frame
           this.previousPositionX = currentPositionX;
         },
         onDragEnd: function () {
@@ -93,15 +79,12 @@
       raycaster="objects: .clickable">
       
       <a-assets>
-        <img id="card" src="/MindAR_demo/Targets/fighterjet.jpeg" crossorigin="anonymous" />
         <a-asset-item id="fighterjet" src="/MindAR_demo/3dmodels/fighter_jet.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        
-        <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
         
         <a-gltf-model 
           drag-rotate-model
@@ -112,13 +95,13 @@
           animation="property: position; to: 0 0.1 0.5; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
 
-        <a-circle 
+        <a-sphere 
           class="clickable" 
           position="0.4 0.2 0.6" 
           radius="0.08" 
           color="#FF0000" 
           hotspot-click>
-        </a-circle>
+        </a-sphere>
 
         <a-entity id="detail-panel" position="0.4 0.45 0.6" visible="false">
           <a-plane width="0.6" height="0.2" color="#000000" opacity="0.8" position="0 0 0"></a-plane>
